@@ -31,4 +31,9 @@
 			<?php 
 					echo mb_substr($tb[0]->getBlog(), 0, 1000)."...";
 			?><br>
+			
+			<h3><code>print_r($tb[0]->getReactions()[0]); </code></h3><br>
+			<?php 
+					print_r($tb[0]->getReactions()[0]);
+			?><br>
 

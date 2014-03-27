@@ -9,7 +9,7 @@
       		notice, this list of conditions and the following disclaimer.
     	* 	Redistributions in binary form must reproduce the above copyright
       		notice, this list of conditions and the following disclaimer in the
-      		ocumentation and/or other materials provided with the distribution.
+      		documentation and/or other materials provided with the distribution.
     	* 	Neither the name of pinna nor the
       		names of its contributors may be used to endorse or promote products
       		derived from this software without specific prior written permission.
@@ -26,6 +26,7 @@
 		SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 	
+	require_once "reaction.php";
 	
 	/**
 	 * A class that represents a tweakblog
@@ -49,7 +50,8 @@
 			
 			//PRECONDITIONs
 			
-			if(is_string($url))
+			// check the input types
+			if(!is_string($url))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -68,7 +70,8 @@
 			
 			//PRECONDITIONs
 			
-			if(is_string($arg))
+			// check the input types
+			if(!is_string($arg))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -86,7 +89,8 @@
 			
 			//PRECONDITIONs
 			
-			if(is_string($arg))
+			// check the input types
+			if(!is_string($arg))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -132,6 +136,45 @@
 		    return $newdoc->saveHTML();
 		}
 		
+		/**
+		 * A function that returns a list of the blogs reactions
+		 * @author 	Thomas Pinna
+		 */
+		public function getReactions(){
+			
+			// LOGIC
+			
+			// load the document			
+			$test = new DOMDocument();
+			@$test->loadHTMLFile($this->url); 			
+			// find the approptiate nodes
+			$xpath = new DOMXPath($test);
+			$nodes = $xpath->query("//*[@class='reactie']");
+			
+			// here will we store the result
+			$result = Array();
+			// loop over reactions
+			foreach ($nodes as $item) {
+				// create an xpath so that querys can be run
+				$newdoc = new DOMDocument();
+		    	$cloned = $item->cloneNode(TRUE);
+		    	$newdoc->appendChild($newdoc->importNode($cloned,TRUE));
+				$xpath = new DOMXPath($newdoc);
+				
+				// get username
+				// TODO instead of using these dirty hack, find the appropriate content in a nice way
+				$node = $xpath->query("//*[@rel='nofollow']");
+				$usr = $node->item(0)->textContent;
+				// get reaction
+				$node = $xpath->query("//*[@class='reactieContent']");
+				$msg = $node->item(0)->textContent;
+				$result[] = new TweakBlogReaction($usr, $msg);
+			}
+			
+			return $result;
+		}
+		
+		
 		/** 
 		 * A function that gets a list of blogs written by a certain user
 		 * @param 	url_name	The name in the user ( url_name.tweakblogs.net leads to the homepage )
@@ -143,7 +186,7 @@
 			
 			// PRECONDITIONS
 			
-			if(is_string($url_name))
+			if(!is_string($url_name))
 					{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			// LOGIC
