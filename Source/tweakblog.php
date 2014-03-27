@@ -33,6 +33,13 @@
 	 */
 	class TweakBlog {
 		
+		/// url to the blog
+		private $url;
+		/// title of the blog (not necessarily set)
+		private $title;
+		/// description of the blog (not necessarily set)
+		private $descrip;
+		
 		/**
 		 * Constructs a tweakblog object from an url
 		 * @param	url		A string of the url to the page of the blog
@@ -162,12 +169,5 @@
 			//return your findings
 			return $result;
 		}
-		
-		/// url to the blog
-		private $url;
-		/// title of the blog (not necessarily set)
-		private $title;
-		/// description of the blog (not necessarily set)
-		private $descrip;
 	}	
 ?>
