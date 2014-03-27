@@ -42,7 +42,7 @@
 			
 			//PRECONDITIONs
 			
-			if(gettype($url) != gettype(""))
+			if(is_string($url))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -61,7 +61,7 @@
 			
 			//PRECONDITIONs
 			
-			if(gettype($arg) != gettype(""))
+			if(is_string($arg))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -79,7 +79,7 @@
 			
 			//PRECONDITIONs
 			
-			if(gettype($arg) != gettype(""))
+			if(is_string($arg))
 				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			//LOGIC
@@ -136,7 +136,7 @@
 			
 			// PRECONDITIONS
 			
-			if(gettype($url_name) != gettype(""))
+			if(is_string($url_name))
 					{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
 			
 			// LOGIC
