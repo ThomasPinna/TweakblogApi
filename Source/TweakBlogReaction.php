@@ -25,20 +25,26 @@
 		(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 		SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
-	 
+	
+	namespace TweakblogAPI;
+	
 	/**
 	 * A class that represents a reaction on a tweakblog
-	 * @author Thomas Pinna
+	 * @author	Thomas Pinna
 	 */
 	class TweakBlogReaction {
 		
-		///The name of the user who posted it
+		///string: The name of the user who posted it
 		private $usr;
+		///string: The contents of the message
 		private $msg;
 		
 		/**
 		 * Constructs a reaction object from a username and a message
-		 * @param	$username	The name of the user
+		 * @author	Thomas Pinna
+		 * @access 	public
+		 * @param	string: username
+		 * @param	string:	message
 		 */
 		public function __construct($username, $message) {
 			
@@ -53,16 +59,26 @@
 			// LOGIC
 			
 			// set local data
-			$this->usr = $username;
+			$this->usr 	= $username;
 			$this->msg	= $message;
 		}
 		
-		public function get_username(){
+		/**
+		 * @author	Thomas Pinna
+		 * @access	public
+		 * @return 	string: username
+		 */
+		public function getName(){
 			return $this->usr;
 		}
 		
-		public function get_message(){
-			return $this->message;
+		/**
+		 * @author	Thomas Pinna
+		 * @access	public
+		 * @return	string: message
+		 */
+		public function getMessage(){
+			return $this->msg;
 		}
 	}
 	 

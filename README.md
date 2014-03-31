@@ -27,3 +27,7 @@ upcoming features
  6.	cache blogs (save them and only load them again if version is older then x time)
  7.	get the time of the blogs
  8.	get blogs (from persons) newer than $time
+ 
+### special thanks to
+ 1. general pinna.tweakblogs.be visitors.readers, who have suggested features and advised to post it on github
+ 2. [Sebastiaan Franken](https://github.com/sebastiaanfranken) who helped me cleaning up the code 

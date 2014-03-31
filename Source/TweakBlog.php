@@ -26,25 +26,34 @@
 		SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 	
-	require_once "reaction.php";
+	namespace TweakblogAPI;
+	
+	require_once "TweakBlogReaction.php";
+
+	use DOMDocument;
+	use DOMXPath;
+	use SimpleXMLElement;
+	use Exception;
 	
 	/**
 	 * A class that represents a tweakblog
 	 * @author Thomas Pinna
+	 * @author Sebastiaan Franken
 	 */
 	class TweakBlog {
 		
-		/// url to the blog
+		/// string: url to the blog
 		private $url;
-		/// title of the blog (not necessarily set)
+		/// string: title of the blog (not necessarily set)
 		private $title;
-		/// description of the blog (not necessarily set)
+		/// string: description of the blog (not necessarily set)
 		private $descrip;
 		
 		/**
 		 * Constructs a tweakblog object from an url
-		 * @param	url		A string of the url to the page of the blog
-		 * @author Thomas Pinna
+		 * @author 	Thomas Pinna
+		 * @access	public
+		 * @param	string: url to the blog
 		 */
 		function __construct($url) {
 			
@@ -63,8 +72,9 @@
 		
 		/**
 		 * sets the title
+		 * @author 	Thomas Pinna
+		 * @access	public
 		 * @param	a string that represents the title
-		 * @author Thomas Pinna
 		 */
 		public function setTitle($arg){
 			
@@ -82,8 +92,9 @@
 		
 		/**
 		 * sets the description
-		 * @param	a string that represents the description
-		 * @author Thomas Pinna
+		 * @author	Thomas Pinna
+		 * @access	public
+		 * @param	string: the description
 		 */ 
 		public function setDescription($arg){
 			
@@ -101,31 +112,35 @@
 		
 		/**
 		 * gets the title
-		 * @return	a string that represents the title
-		 * @author Thomas Pinna
+		 * @author 	Thomas Pinna
+		 * @access	public
+		 * @return	string:	the title
 		 */
 		public function getTitle(){	return $this->title; }
 		
 		/**
 		 * gets the description
-		 * @return	a string that represents the description
-		 * @author Thomas Pinna
+		 * @author 	Thomas Pinna
+		 * @access	public
+		 * @return 	string:	the description
 		 */ 
 		public function getDescription(){return $this->descrip;	}
 		
 		/**
 		 * gets the contents of a file
-		 * @author Thomas Pinna
+		 * @author 	Thomas Pinna
+		 * @access	public
+		 * @return 	string:	The contents of the blog
 		 */
 		public function getBlog(){
 				
 			// LOGIC	
 			
 			// load the document			
-			$test = new DOMDocument();
-			@$test->loadHTMLFile($this->url);
-			// find the approptiate node
-			$xpath = new DOMXPath($test);
+			$htmlfile = new DOMDocument();
+			@$htmlfile->loadHTMLFile($this->url);
+			// find the appropriate node
+			$xpath = new DOMXPath($htmlfile);
 			$nodes = $xpath->query("//*[@class='article']");
 			$node = $nodes->item(0); 
 			// extract html from the node, by creating new domdocument
@@ -139,20 +154,22 @@
 		/**
 		 * A function that returns a list of the blogs reactions
 		 * @author 	Thomas Pinna
+		 * @access 	public
+		 * @return 	array: a list of tweakblogreactions on this blog
 		 */
 		public function getReactions(){
 			
 			// LOGIC
 			
 			// load the document			
-			$test = new DOMDocument();
-			@$test->loadHTMLFile($this->url); 			
+			$htmlfile = new DOMDocument();
+			@$htmlfile->loadHTMLFile($this->url); 			
 			// find the approptiate nodes
-			$xpath = new DOMXPath($test);
+			$xpath = new DOMXPath($htmlfile);
 			$nodes = $xpath->query("//*[@class='reactie']");
 			
 			// here will we store the result
-			$result = Array();
+			$results = Array();
 			// loop over reactions
 			foreach ($nodes as $item) {
 				// create an xpath so that querys can be run
@@ -168,19 +185,20 @@
 				// get reaction
 				$node = $xpath->query("//*[@class='reactieContent']");
 				$msg = $node->item(0)->textContent;
-				$result[] = new TweakBlogReaction($usr, $msg);
+				$results[] = new TweakBlogReaction($usr, $msg);
 			}
 			
-			return $result;
+			return $results;
 		}
 		
 		
 		/** 
 		 * A function that gets a list of blogs written by a certain user
-		 * @param 	url_name	The name in the user ( url_name.tweakblogs.net leads to the homepage )
-		 * 						this must be a string
-		 * @return 	a list to urls to the different blogs of this user
 		 * @author 	Thomas Pinna
+		 * @access 	public
+		 * @static
+		 * @param 	string: url_name where url_name.tweakblogs.net leads to the homepage
+		 * @return 	array: a list to urls to the different blogs of this user
 		 */
 		static public function getTweakblogs( $url_name ){
 			
@@ -192,7 +210,7 @@
 			// LOGIC
 			
 			// create the url
-			$url = "http://".$url_name . ".tweakblogs.net/feed/";
+			$url = "http://" . $url_name . ".tweakblogs.net/feed/";
 			// load the url
 			$xml=simplexml_load_file($url);
 			$xml->addAttribute('encoding', 'UTF-8');
@@ -202,10 +220,13 @@
 			//get the urls from the feed and create the Tweakblogs
 			foreach ($xml->channel->children() as $value) {
 				if (isset($value->guid)){
-					$tempval = new TweakBlog((string)($value->guid));
-					$tempval->setTitle((string)($value->title));
-					$tempval->setDescription((string)($value->description)); 
-					$result[] = $tempval; 
+					$guid 	=	(string)($value->guid);
+					$title	=	(string)($value->title);
+					$descrip=	(string)($value->description);
+					$tweakblog = new TweakBlog($guid);
+					$tweakblog->setTitle($title);
+					$tweakblog->setDescription($descrip); 
+					$result[] = $tweakblog; 
 				}
 			}
 			
