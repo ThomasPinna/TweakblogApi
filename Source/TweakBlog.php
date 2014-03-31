@@ -66,8 +66,8 @@
 			//LOGIC
 			
 			$this->url 		= 	$url;
-			$this->title 	= 	"--";
-			$this->descrip	=	"--"; 
+			$this->title 	= 	"";
+			$this->descrip	=	""; 
 		}
 		
 		/**
@@ -166,7 +166,7 @@
 			@$htmlfile->loadHTMLFile($this->url); 			
 			// find the approptiate nodes
 			$xpath = new DOMXPath($htmlfile);
-			$nodes = $xpath->query("//*[@class='reactie']");
+			$nodes = $xpath->query("//*[@class='reactie']|//*[@class='reactie ownreply']");
 			
 			// here will we store the result
 			$results = Array();
