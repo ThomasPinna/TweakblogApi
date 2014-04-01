@@ -190,6 +190,31 @@
 			
 			return $results;
 		}
+
+		/**
+		 * A function that returns a (basic) reaction form
+		 * @author 	Thomas Pinna
+		 * @access 	public
+		 * @return 	string: a form to a reaction
+		 */
+		public function getReactionForm(){
+			
+			// LOGIC
+			
+			// load the document			
+			$htmlfile = new DOMDocument();
+			@$htmlfile->loadHTMLFile($this->url); 			
+			// find the approptiate nodes
+			$xpath = new DOMXPath($htmlfile);
+			$nodes = $xpath->query("//*[@id='reactieForm']");
+			$node=$nodes->item(0);
+			// extract html from the node, by creating new domdocument
+			$newdoc = new DOMDocument();
+		    $cloned = $node->cloneNode(TRUE);
+		    $newdoc->appendChild($newdoc->importNode($cloned,TRUE));
+		    // return results
+		    return $newdoc->saveHTML();
+		}
 		
 		
 		/** 

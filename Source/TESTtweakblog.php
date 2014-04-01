@@ -44,6 +44,9 @@
 			echo "</i>";
 			
 		}
+		
+		//print reactionform
+		echo $last_tb->getReactionForm();
 	}catch(Exception $e){
 		echo $e->getMessage();
 	}
