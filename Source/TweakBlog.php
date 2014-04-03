@@ -62,7 +62,11 @@
 			
 			// check the input types
 			if(!is_string($url))
-				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+				{ throw new Exception("TweakBlog::__construct: first argument must be a string");}
+			if(!is_string($title))
+				{ throw new Exception("TweakBlog::__construct: second argument must be a string");}
+			if(!is_string($descrip))
+				{ throw new Exception("TweakBlog::__construct: thirs argument must be a string");}
 			
 			//LOGIC
 			
@@ -71,7 +75,7 @@
 				$this->setTitle($title);
 				$this->setDescription($descrip);
 			} catch (Exception $e){
-				throw new Exception("Tweakblog.__construct: could not set attributes\n" . $e);				
+				throw new Exception("Tweakblog::__construct(): could not set attributes\n" . $e);				
 			}
 		}
 		
@@ -86,7 +90,7 @@
 			
 			// check the input types
 			if(!is_string($arg))
-				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+				{ throw new Exception("TweakBlog::setTitle() :Argument must be a string");}
 			
 			//LOGIC
 			
@@ -105,7 +109,7 @@
 			
 			// check the input types
 			if(!is_string($arg))
-				{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+				{ throw new Exception("TweakBlog::setDescription() :Argument must be a string");}
 			
 			//LOGIC
 			
@@ -229,8 +233,9 @@
 			
 			// PRECONDITIONS
 			
+			// check input types
 			if(!is_string($url_name))
-					{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+					{ throw new Exception("TweakBlog::getTweakblogsFrom(url_name) :Argument must be a string");}
 			
 			// LOGIC
 			
@@ -247,7 +252,7 @@
 		 * @return 	array: a list to urls to the different blogs of this user
 		 */
 		static public function getTweakblogsLatest( ){
-
+					
 			// LOGIC
 			
 			// create the url
@@ -267,7 +272,7 @@
 			//PRECONDITION
 			
 			if(!is_string($url))
-					{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+					{ throw new Exception("TweakBlog::getTweakblogsFromRss(url_name) :Argument must be a string"); }
 			
 			//LOGIC
 				
