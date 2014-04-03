@@ -11,6 +11,13 @@ be fun for me to see it.
 
 feedback is always appreciated
 
+### help needed
+
+I can't get the reaction form working. When downloading severside and sending 
+clientside it doesn't work. It doesn't seem possible at first site to do it in 
+javascript. (You can't use ajax to get another website) and an iframe is not ideal
+at all (especially because I can not hide all irrelevant info and just show the form)
+
 ### features
 
 current features:
