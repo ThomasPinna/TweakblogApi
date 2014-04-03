@@ -196,11 +196,11 @@
 		 * @access 	public
 		 * @return 	string: a form to a reaction
 		 */
-		/*public function getReactionForm(){
+		public function getReactionForm(){
 			
 			// LOGIC
 			
-			// load the document			
+			/*// load the document			
 			$htmlfile = new DOMDocument();
 			@$htmlfile->loadHTMLFile($this->url); 			
 			// find the approptiate nodes
@@ -212,8 +212,11 @@
 		    $cloned = $node->cloneNode(TRUE);
 		    $newdoc->appendChild($newdoc->importNode($cloned,TRUE));
 		    // return results
-		    return $newdoc->saveHTML();
-		}*/
+		    return $newdoc->saveHTML();*/
+		    
+		    //TODO fix reactionform instead of just posting an url
+		    return $this->url."#reacties";
+		}
 
 		/** 
 		 * A function that gets a list of blogs written by a certain user
