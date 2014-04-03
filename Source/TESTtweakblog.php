@@ -10,11 +10,17 @@
 	try{
 		$testcases = Array();
 		
-		// get all the Tweakblogs
-		$tb = TweakblogAPI\TweakBlog::getTweakblogs( "pinna" );
+		// get all the Tweakblogs from pinna
+		$tb = TweakblogAPI\TweakBlog::getTweakblogsFrom( "pinna" );
+		// get all the latest Tweakblogs
+		$tbl= TweakblogAPI\TweakBlog::getTweakblogsLatest();
 		
 		// the last tweakblog
 		$last_tb = $tb[0];
+		
+		echo "<pre>";
+		print_r($tbl);
+		echo "</pre>";
 		
 		//print title
 		echo "<h1>";

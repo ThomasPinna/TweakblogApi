@@ -38,7 +38,7 @@
 	/**
 	 * A class that represents a tweakblog
 	 * @author Thomas Pinna
-	 * @author Sebastiaan Franken
+	 * @author Sebastiaan Franken (helped with codecleaning)
 	 */
 	class TweakBlog {
 		
@@ -52,7 +52,6 @@
 		/**
 		 * Constructs a tweakblog object from an url
 		 * @author 	Thomas Pinna
-		 * @access	public
 		 * @param	string: url to the blog
 		 */
 		function __construct($url) {
@@ -73,7 +72,6 @@
 		/**
 		 * sets the title
 		 * @author 	Thomas Pinna
-		 * @access	public
 		 * @param	a string that represents the title
 		 */
 		public function setTitle($arg){
@@ -93,7 +91,6 @@
 		/**
 		 * sets the description
 		 * @author	Thomas Pinna
-		 * @access	public
 		 * @param	string: the description
 		 */ 
 		public function setDescription($arg){
@@ -113,7 +110,6 @@
 		/**
 		 * gets the title
 		 * @author 	Thomas Pinna
-		 * @access	public
 		 * @return	string:	the title
 		 */
 		public function getTitle(){	return $this->title; }
@@ -121,7 +117,6 @@
 		/**
 		 * gets the description
 		 * @author 	Thomas Pinna
-		 * @access	public
 		 * @return 	string:	the description
 		 */ 
 		public function getDescription(){return $this->descrip;	}
@@ -129,7 +124,6 @@
 		/**
 		 * gets the contents of a file
 		 * @author 	Thomas Pinna
-		 * @access	public
 		 * @return 	string:	The contents of the blog
 		 */
 		public function getBlog(){
@@ -154,7 +148,6 @@
 		/**
 		 * A function that returns a list of the blogs reactions
 		 * @author 	Thomas Pinna
-		 * @access 	public
 		 * @return 	array: a list of tweakblogreactions on this blog
 		 */
 		public function getReactions(){
@@ -215,17 +208,15 @@
 		    // return results
 		    return $newdoc->saveHTML();
 		}
-		
-		
+
 		/** 
 		 * A function that gets a list of blogs written by a certain user
 		 * @author 	Thomas Pinna
-		 * @access 	public
 		 * @static
 		 * @param 	string: url_name where url_name.tweakblogs.net leads to the homepage
 		 * @return 	array: a list to urls to the different blogs of this user
 		 */
-		static public function getTweakblogs( $url_name ){
+		static public function getTweakblogsFrom( $url_name ){
 			
 			// PRECONDITIONS
 			
@@ -235,7 +226,42 @@
 			// LOGIC
 			
 			// create the url
-			$url = "http://" . $url_name . ".tweakblogs.net/feed/";
+			$url = "http://" . $url_name .".tweakblogs.net/feed/";
+			//create the list of blogs and return them
+			return TweakBlog::TweakBlogsFromRss($url);
+		}
+		
+		/** 
+		 * A function that gets a list of the most recent tweakblogs 
+		 * @author 	Thomas Pinna
+		 * @param 	string: url_name where url_name.tweakblogs.net leads to the homepage
+		 * @return 	array: a list to urls to the different blogs of this user
+		 */
+		static public function getTweakblogsLatest( ){
+
+			// LOGIC
+			
+			// create the url
+			$url = "http://tweakblogs.net/feed/";
+			//create the list of blogs and return them
+			return TweakBlog::TweakBlogsFromRss($url);
+		}
+
+		/**
+		 * A helperfunction that converts a tweakers-rss link to an array of Tweakblogs
+		 * @author	Thomas Pinna
+		 * @param	String: The url to convert
+		 * @return 	Array: a list of Tweakblogs
+		 */
+		private static function TweakBlogsFromRss($url){
+			
+			//PRECONDITION
+			
+			if(!is_string($url))
+					{ throw new Exception("getTweakblogs(url_name)::Argument must be a string");}
+			
+			//LOGIC
+				
 			// load the url
 			$xml=simplexml_load_file($url);
 			$xml->addAttribute('encoding', 'UTF-8');
@@ -245,17 +271,17 @@
 			//get the urls from the feed and create the Tweakblogs
 			foreach ($xml->channel->children() as $value) {
 				if (isset($value->guid)){
-					$guid 	=	(string)($value->guid);
-					$title	=	(string)($value->title);
-					$descrip=	(string)($value->description);
-					$tweakblog = new TweakBlog($guid);
+					$guid 		=	(string)($value->guid);
+					$title		=	(string)($value->title);
+					$descrip	=	(string)($value->description);
+					$tweakblog 	= 	new TweakBlog($guid);
 					$tweakblog->setTitle($title);
 					$tweakblog->setDescription($descrip); 
 					$result[] = $tweakblog; 
 				}
 			}
 			
-			//return your findings
+			//return the result
 			return $result;
 		}
 	}	
