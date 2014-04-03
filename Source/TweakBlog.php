@@ -53,8 +53,10 @@
 		 * Constructs a tweakblog object from an url
 		 * @author 	Thomas Pinna
 		 * @param	string: url to the blog
+		 * @param	string:	title of the blog (optional)
+		 * @param	string:	title of the blog (optional)
 		 */
-		function __construct($url) {
+		function __construct($url, $title ="", $descrip="") {
 			
 			//PRECONDITIONs
 			
@@ -65,8 +67,12 @@
 			//LOGIC
 			
 			$this->url 		= 	$url;
-			$this->title 	= 	"";
-			$this->descrip	=	""; 
+			try{
+				$this->setTitle($title);
+				$this->setDescription($descrip);
+			} catch (Exception $e){
+				throw new Exception("Tweakblog.__construct: could not set attributes\n" . $e);				
+			}
 		}
 		
 		/**
@@ -274,10 +280,8 @@
 					$guid 		=	(string)($value->guid);
 					$title		=	(string)($value->title);
 					$descrip	=	(string)($value->description);
-					$tweakblog 	= 	new TweakBlog($guid);
-					$tweakblog->setTitle($title);
-					$tweakblog->setDescription($descrip); 
-					$result[] = $tweakblog; 
+					$tweakblog 	= 	new TweakBlog($guid, $title, $descrip);
+					$result[] 	= 	$tweakblog; 
 				}
 			}
 			
