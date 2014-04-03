@@ -185,12 +185,12 @@
 		}
 
 		/**
-		 * A function that returns a (basic) reaction form
+		 * A function that returns a (basic) reaction form (doesn't work yet)
 		 * @author 	Thomas Pinna
 		 * @access 	public
 		 * @return 	string: a form to a reaction
 		 */
-		public function getReactionForm(){
+		/*public function getReactionForm(){
 			
 			// LOGIC
 			
@@ -207,7 +207,7 @@
 		    $newdoc->appendChild($newdoc->importNode($cloned,TRUE));
 		    // return results
 		    return $newdoc->saveHTML();
-		}
+		}*/
 
 		/** 
 		 * A function that gets a list of blogs written by a certain user
