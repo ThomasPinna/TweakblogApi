@@ -106,5 +106,33 @@
 			// if in array then it must be a whitelist to be true, if not in array it must be a blacklist to be true
 			return ( in_array($elem, $this->valueList, TRUE) ) ? !$this->isBlackList : $this->isBlackList ;
 		}
+		
+		/**
+		 * function to filter out results that or not allowed
+		 * @author	Thomas Pinna
+		 * @param	An array with values to be filtered out
+		 */
+		public function filter($array){
+			
+			//PRECONDITION
+			
+			if(!is_array($array))
+				{throw new Exception("BlackWhiteList::filter() : can only have an array as parameter");}
+				
+			//LOGIC
+			
+			//optimalisation for when empty Blacklist - everything is allowed
+			if (!$this->isBlackList && empty($this->valueList) ){
+				return;
+			}
+			
+			//loop over the array and check each value 
+			foreach ($array as $key => $value) {
+				if( !$this->isAllowed($value) ){
+					unset($array[$key]);
+				}
+			}
+			
+		}
 	}
 ?>

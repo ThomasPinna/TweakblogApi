@@ -29,6 +29,7 @@
 	namespace TweakblogAPI;
 	
 	require_once "TweakBlogReaction.php";
+	require_once "BlackWhiteList.php";
 
 	use DOMDocument;
 	use DOMXPath;
@@ -48,6 +49,8 @@
 		private $title;
 		/// string: description of the blog (not necessarily set)
 		private $descrip;
+		/// string:	the author of this blog
+		private $author;
 		
 		/**
 		 * Constructs a tweakblog object from an url
@@ -71,6 +74,8 @@
 			//LOGIC
 			
 			$this->url 		= 	$url;
+			preg_match("#http://(.*?)\.tweakblogs.net#s", $url, $this->author);
+			$this->author = $this->author[1];
 			try{
 				$this->setTitle($title);
 				$this->setDescription($descrip);
@@ -123,6 +128,13 @@
 		 * @return	string:	the title
 		 */
 		public function getTitle(){	return $this->title; }
+		
+		/**
+		 * gets the author
+		 * @author 	Thomas Pinna
+		 * @return	string:	the author
+		 */
+		public function getAuthor(){ return $this->author; }
 		
 		/**
 		 * gets the description
@@ -248,17 +260,36 @@
 		/** 
 		 * A function that gets a list of the most recent tweakblogs 
 		 * @author 	Thomas Pinna
-		 * @param 	string: url_name where url_name.tweakblogs.net leads to the homepage
+		 * @param 	BlackWhiteList: defines if a blog from a user should appear in the return result
 		 * @return 	array: a list to urls to the different blogs of this user
 		 */
-		static public function getTweakblogsLatest( ){
+		static public function getTweakblogsLatest($bwl = NULL ){
 					
+			// PRECONDITIONS
+			
+			if( !is_a($bwl, "TweakblogAPI\BlackWhiteList") && !is_null($bwl))
+				{throw new Exception("TweakBlog::getTweakBlogLatest() :argument must be a BlackWhiteList or left empty");}
+			
 			// LOGIC
 			
-			// create the url
+			//if not initiated, initiate the $bwl
+			if( is_null($bwl)){
+				$bwl = new BlackWhiteList(TRUE, array());
+			}
+			
+			//create the url
 			$url = "http://tweakblogs.net/feed/";
-			//create the list of blogs and return them
-			return TweakBlog::TweakBlogsFromRss($url);
+			//create the list of blogs
+			$tweakblogs = TweakBlog::TweakBlogsFromRss($url);
+			// filter the wrong ones out
+			if( !is_null($bwl)){
+				foreach ($tweakblogs as $key => $value) {
+					if( !$bwl->isAllowed($value->getAuthor() ) ){
+						unset($tweakblogs[$key]);
+					}
+				}
+			}
+			return $tweakblogs;
 		}
 
 		/**
@@ -267,7 +298,7 @@
 		 * @param	String: The url to convert
 		 * @return 	Array: a list of Tweakblogs
 		 */
-		private static function TweakBlogsFromRss($url){
+		static private function TweakBlogsFromRss($url){
 			
 			//PRECONDITION
 			
