@@ -32,7 +32,7 @@ current features:
 
 upcoming features
 
- 3.	hack comment, so that you can place comments via tweakblogs.net
+ 1.	hack comment, so that you can place comments via tweakblogs.net (I need help for this one)
  
 ###compatibility
 
@@ -45,3 +45,8 @@ needs: DOMDocument, DOMXPath, SimpleXML, Exception
  1. general pinna.tweakblogs.be visitors.readers, who have suggested features and advised to post it on github
  2. [Sebastiaan Franken](https://github.com/sebastiaanfranken) who helped me cleaning up the code 
 
+#### donate
+
+If you'd like to donate (I had requests), you can send something via paypall at pinna48@gmail.com. This is absolutely not necessary
+and not at all the purpose of this project. Please don't pay me when you can pay for something of better use. The software is free
+and will remain free. Also you don't get any precedence in feature-requests as anyone else.
