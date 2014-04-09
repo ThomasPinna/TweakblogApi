@@ -33,9 +33,6 @@ current features:
 upcoming features
 
  3.	hack comment, so that you can place comments via tweakblogs.net
- 4.	get Blogs from multiple persons
- 6.	cache blogs (save them and only load them again if version is older then x time)
- 8.	get blogs (from persons) newer than $time
  
 ###compatibility
 
