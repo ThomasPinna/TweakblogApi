@@ -1,4 +1,4 @@
-##TweakBlog Api 0.1
+##TweakBlog Api 0.2
 
 ### about
 
