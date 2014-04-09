@@ -20,16 +20,21 @@
 		// get all the latest Tweakblogs
 		$tbl= TweakblogAPI\TweakBlog::getTweakblogsLatest($bw);
 		
-		// the last tweakblog
+		//last tweakblog from pinna
 		$last_tb = $tb[0];
 		
+		
 		echo "<pre>";
+		print_r($tb);
 		print_r($tbl);
 		echo "</pre>";
 		
+		//the test tweakblog (for when things like title etcetera are not set by the getTweakblogsXXXX(function))
+		$ttb = new TweakblogAPI\Tweakblog("http://pinna.tweakblogs.net/blog/10130/update-tweakblog-api-01.html");
+		
 		//print title
 		echo "<h1>";
-		echo $last_tb->getTitle();
+		echo $ttb->getTitle();
 		echo "</h1>";
 		
 		//print Description

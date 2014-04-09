@@ -127,7 +127,23 @@
 		 * @author 	Thomas Pinna
 		 * @return	string:	the title
 		 */
-		public function getTitle(){	return $this->title; }
+		public function getTitle(){
+			
+			// LOGIC	
+			
+			//if we have the title, return it, else retrieve it
+			if($this->title != ""){
+				return $this->title;
+			} else {
+				// if we don't have it, retrieve it
+				$htmlfile = new DOMDocument();
+				@$htmlfile->loadHTMLFile($this->url);
+				// find the appropriate node
+				$h2elements = $htmlfile->getElementsByTagName("h2");
+				$h2element  = $h2elements->item(0); 
+				return $h2element->nodeValue;
+			}
+		}
 		
 		/**
 		 * gets the author
