@@ -28,13 +28,13 @@ current features:
 	4.	whitelist/blacklist like features
 	5.	find title/description if it doesn't exist yet
 	6.	temporal blog cache (every blog will now be downloaded at most once per execution)
+	7.	get the time of the blogs
 
 upcoming features
 
  3.	hack comment, so that you can place comments via tweakblogs.net
  4.	get Blogs from multiple persons
  6.	cache blogs (save them and only load them again if version is older then x time)
- 7.	get the time of the blogs
  8.	get blogs (from persons) newer than $time
  
 ###compatibility

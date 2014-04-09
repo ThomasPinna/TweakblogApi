@@ -37,6 +37,8 @@
 		
 		//print Description
 		echo "<i>";
+		echo $last_tb->getTime();
+		echo " -- ";
 		echo $ttb->getDescription();
 		echo "</i>";
 		

@@ -51,6 +51,8 @@
 		private $descrip;
 		/// string:	the author of this blog
 		private $author;
+		/// date: the date of this blog (in "D, d F Y H:i:s GMT" format)
+		private $datetime;
 		/// domdocument: cached version of the website to limit trafic and to have higher performance
 		private $domdoc;
 		
@@ -59,9 +61,10 @@
 		 * @author 	Thomas Pinna
 		 * @param	string: url to the blog
 		 * @param	string:	title of the blog (optional)
-		 * @param	string:	title of the blog (optional)
+		 * @param	string:	description of the blog (optional)
+		 * @param	string: time of the blog (optional)
 		 */
-		function __construct($url, $title ="", $descrip="") {
+		function __construct($url, $title ="", $descrip="", $time="") {
 			
 			//PRECONDITIONs
 			
@@ -71,7 +74,9 @@
 			if(!is_string($title))
 				{ throw new Exception("TweakBlog::__construct: second argument must be a string");}
 			if(!is_string($descrip))
-				{ throw new Exception("TweakBlog::__construct: thirs argument must be a string");}
+				{ throw new Exception("TweakBlog::__construct: third argument must be a string");}
+			if(!is_string($time))
+				{ throw new Exception("TweakBlog::__construct: fourth argument must be a string");}
 			
 			//LOGIC
 			
@@ -80,10 +85,11 @@
 			// retrieve the author from the url
 			preg_match("#http://(.*?)\.tweakblogs.net#s", $url, $this->author);
 			$this->author = $this->author[1];
-			// set title and description	
+			// set title and description and time	
 			try{
 				$this->setTitle($title);
 				$this->setDescription($descrip);
+				$this->setTime($time);
 			} catch (Exception $e){
 				throw new Exception("Tweakblog::__construct(): could not set attributes\n" . $e->getMessage());				
 			}
@@ -126,6 +132,25 @@
 			//LOGIC
 			
 			$this->descrip = $arg;
+			
+		}
+		
+		/**
+		 * sets the time
+		 * @author	Thomas Pinna
+		 * @param	string: the time
+		 */ 
+		public function setTime($arg){
+			
+			//PRECONDITIONs
+			
+			// check the input types
+			if(!is_string($arg))
+				{ throw new Exception("TweakBlog::setTime() :Argument must be a string");}
+			
+			//LOGIC
+			
+			$this->datetime = $arg;
 			
 		}
 		
@@ -175,6 +200,39 @@
 			}
 			
 			return $this->descrip;	
+		}
+		
+		/**
+		 * gets the Time
+		 * @author 	Thomas Pinna
+		 * @return 	string:	the description
+		 */ 
+		public function getTime(){
+		
+			// LOGIC
+			
+			//if we don't have it, retrieve it
+			if ($this->datetime == ""){
+				// retrieve the document
+				$htmlfile = $this->getDomDoc();
+				// retrieve the right tag
+				$xpath = new DOMXPath($htmlfile);
+				$nodes = $xpath->query("//*[@class='author']");
+				$node = $nodes->item(0); 
+				// extract html from the node, by creating new domdocument
+				$newdoc = new DOMDocument();
+		    	$cloned = $node->cloneNode(TRUE);
+		    	$newdoc->appendChild($newdoc->importNode($cloned,TRUE));
+				// authorelement
+				$authorelement = $newdoc->saveHTML();
+				$authorelement = strip_tags($authorelement);
+				//get the date out of it
+				preg_match("#[a-z]*\ [0-9]*\ [a-z]*\ [0-9]*\ [0-9]*:[0-9]*#s", $authorelement, $solution);
+				//store it in the right format
+				$this->datetime = $this->dutchDateToStandard($solution[0]);
+			}
+			
+			return $this->datetime;	
 		}
 		
 		/**
@@ -351,7 +409,8 @@
 					$guid 		=	(string)($value->guid);
 					$title		=	(string)($value->title);
 					$descrip	=	(string)($value->description);
-					$tweakblog 	= 	new TweakBlog($guid, $title, $descrip);
+					$time		=	(string)($value->pubDate);
+					$tweakblog 	= 	new TweakBlog($guid, $title, $descrip, $time);
 					$result[] 	= 	$tweakblog; 
 				}
 			}
@@ -389,7 +448,7 @@
 			
 			//PRECONDITION
 			
-			if(!is_string($url))
+			if(!is_string($dutch_date))
 					{ throw new Exception("TweakBlog::dutchDateToStandard :Argument must be a string"); }
 			
 			//LOGIC
