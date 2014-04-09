@@ -37,6 +37,12 @@ upcoming features
  7.	get the time of the blogs
  8.	get blogs (from persons) newer than $time
  
+###compatibility
+
+Works with every php version starting from 4.3.3.
+
+needs: DOMDocument, DOMXPath, SimpleXML, Exception
+ 
 ### special thanks to
 
  1. general pinna.tweakblogs.be visitors.readers, who have suggested features and advised to post it on github
