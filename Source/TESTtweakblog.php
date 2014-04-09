@@ -13,8 +13,6 @@
 		// geen persoonlijk probleem met marcotm, maar hij is een mooi voorbeeld, aangezien hij heel frequent blogt
 		$bw = new TweakblogAPI\BlackWhiteList(TRUE, array("marcotm") );
 		
-		echo is_a($bw, "TweakblogAPI\BlackWhiteList"); 
-		
 		// get all the Tweakblogs from pinna
 		$tb = TweakblogAPI\TweakBlog::getTweakblogsFrom( "pinna" );
 		// get all the latest Tweakblogs
@@ -39,7 +37,7 @@
 		
 		//print Description
 		echo "<i>";
-		echo $last_tb->getDescription();
+		echo $ttb->getDescription();
 		echo "</i>";
 		
 		//print contents

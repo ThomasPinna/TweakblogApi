@@ -51,6 +51,8 @@
 		private $descrip;
 		/// string:	the author of this blog
 		private $author;
+		/// domdocument: cached version of the website to limit trafic and to have higher performance
+		private $domdoc;
 		
 		/**
 		 * Constructs a tweakblog object from an url
@@ -73,15 +75,20 @@
 			
 			//LOGIC
 			
+			// set the url
 			$this->url 		= 	$url;
+			// retrieve the author from the url
 			preg_match("#http://(.*?)\.tweakblogs.net#s", $url, $this->author);
 			$this->author = $this->author[1];
+			// set title and description	
 			try{
 				$this->setTitle($title);
 				$this->setDescription($descrip);
 			} catch (Exception $e){
-				throw new Exception("Tweakblog::__construct(): could not set attributes\n" . $e);				
+				throw new Exception("Tweakblog::__construct(): could not set attributes\n" . $e->getMessage());				
 			}
+			// set cached version to NULL
+			$this->domdoc = NULL;
 		}
 		
 		/**
@@ -136,8 +143,8 @@
 				return $this->title;
 			} else {
 				// if we don't have it, retrieve it
-				$htmlfile = new DOMDocument();
-				@$htmlfile->loadHTMLFile($this->url);
+				// retrieve the document
+				$htmlfile = $this->getDomDoc();
 				// find the appropriate node
 				$h2elements = $htmlfile->getElementsByTagName("h2");
 				$h2element  = $h2elements->item(0); 
@@ -157,7 +164,18 @@
 		 * @author 	Thomas Pinna
 		 * @return 	string:	the description
 		 */ 
-		public function getDescription(){return $this->descrip;	}
+		public function getDescription(){
+		
+			// LOGIC
+		
+			if ($this->descrip == ""){
+				//blog without tags
+				$bwt = strip_tags($this->getBlog());
+				$this->descrip = substr($bwt, 0,397)."...";
+			}
+			
+			return $this->descrip;	
+		}
 		
 		/**
 		 * gets the contents of a file
@@ -169,8 +187,7 @@
 			// LOGIC	
 			
 			// load the document			
-			$htmlfile = new DOMDocument();
-			@$htmlfile->loadHTMLFile($this->url);
+			$htmlfile = $this->getDomDoc();
 			// find the appropriate node
 			$xpath = new DOMXPath($htmlfile);
 			$nodes = $xpath->query("//*[@class='article']");
@@ -193,8 +210,7 @@
 			// LOGIC
 			
 			// load the document			
-			$htmlfile = new DOMDocument();
-			@$htmlfile->loadHTMLFile($this->url); 			
+			$htmlfile = $this->getDomDoc(); 			
 			// find the approptiate nodes
 			$xpath = new DOMXPath($htmlfile);
 			$nodes = $xpath->query("//*[@class='reactie']|//*[@class='reactie ownreply']");
@@ -233,8 +249,7 @@
 			// LOGIC
 			
 			/*// load the document			
-			$htmlfile = new DOMDocument();
-			@$htmlfile->loadHTMLFile($this->url); 			
+			$htmlfile = $this->getDomDoc(); 			
 			// find the approptiate nodes
 			$xpath = new DOMXPath($htmlfile);
 			$nodes = $xpath->query("//*[@id='reactieForm']");
@@ -276,6 +291,7 @@
 		/** 
 		 * A function that gets a list of the most recent tweakblogs 
 		 * @author 	Thomas Pinna
+		 * @static
 		 * @param 	BlackWhiteList: defines if a blog from a user should appear in the return result
 		 * @return 	array: a list to urls to the different blogs of this user
 		 */
@@ -342,6 +358,24 @@
 			
 			//return the result
 			return $result;
+		}
+		
+		/**
+		 * A helperfunction that will store the domdocument once it's asked. (so that it won't be needed to ask it again)
+		 * @author Thomas Pinna
+		 * @return	DomDocument : A Domdocumentelement created from the url of the blog
+		 */
+		private function getDomDoc(){
+			
+			//LOGIC
+			
+			// if not exist yet, create the domdoc
+			if ( is_null($this->domdoc) ){
+				$this->domdoc = new DOMDocument();
+				@$this->domdoc->loadHTMLFile($this->url);
+			} 
+			
+			return $this->domdoc;
 		}
 	}	
 ?>
