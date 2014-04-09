@@ -377,5 +377,56 @@
 			
 			return $this->domdoc;
 		}
+		
+		/**
+		 * A helper function that converts a dutchType date (like "donderdag 27 maart 2014 00:30") into a standard format: "D, d F Y H:i:s GMT".
+		 * Extra notice: This function will set the s to "00", it is not possible to make it more precise
+		 * @author	Thomas Pinna
+		 * @param	string:	the date to convert
+		 * @return 	string:	a date in "D, d F Y H:i:s GMT" format
+		 */		
+		static private function dutchDateToStandard($dutch_date){
+			
+			//PRECONDITION
+			
+			if(!is_string($url))
+					{ throw new Exception("TweakBlog::dutchDateToStandard :Argument must be a string"); }
+			
+			//LOGIC
+			
+			// split the dutch_date in usable parts
+			$converted_date = array();
+			$pattern = "#(?P<day_of_the_week>\w+)\ (?P<day>\d+)\ (?P<month>\w+)\ (?P<year>\d+)\ (?P<hour>\d+):(?P<minute>\d+)#s";
+			preg_match($pattern,$dutch_date, $converted_date);
+			//create the empty date, we'll store our date in this variable in "D, d F Y H:i:s GMT" format
+			$date = "";
+			//create the "D, "-part
+			$daymap = array("maandag" => "Mon", "dinsdag"=>"Tue", "woensdag"=>"Wed", "donderdag"=>"Thu", 
+			                "vrijdag"=>"Fri", "zaterdag"=>"Sat", "zondag"=>"Sun");
+			$date .= $daymap[$converted_date["day_of_the_week"]].", ";
+			//create the "d " part
+			$date .= $converted_date["day"]. " ";
+			//create the "F " part
+			$datemap = array("januari"=>"Jan", "februari"=>"Feb", "maart"=>"Mar", "april"=>"Apr", "mei"=>"May", "juni"=>"Jun", 
+			                 "juli"=>"Jul", "augustus"=>"Aug", "september"=>"Sep", "oktober"=>"Okt", "november"=>"Nov", "december"=>"Dec");
+			$date .= $datemap[$converted_date["month"]]. " ";
+			//create the "Y " part
+			$date .= $converted_date["year"] . " ";
+			//create the "H:" part
+			if ($converted_date["hour"] == "00"){
+				$converted_date["hour"] = "23";
+			} elseif ($converted_date["hour"] == "10"){
+				$converted_date["hour"] = "09";
+			} elseif ($converted_date["hour"] == "20"){
+			    $converted_date["hour"] = "19";
+			} else{
+				$converted_date["hour"] = substr($converted_date["hour"], 0, 1).(substr($converted_date["hour"], 0, 1) - 1);
+			}
+			$date .= $converted_date["hour"] . ":";
+			//create the "i:s" part
+			$date .= $converted_date["minute"] .":00 GMT";
+			return $date;
+			
+		}
 	}	
 ?>
