@@ -26,7 +26,7 @@
 		SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 	
-	//namespace TweakblogAPI;
+	namespace TweakblogAPI;
 	
 	/**
 	 * A class that defines a Black or a white list
