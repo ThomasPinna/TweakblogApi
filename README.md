@@ -1,4 +1,4 @@
-##TweakBlog Api 0.2  without namespaces
+##TweakBlog Api 0.2 without namespaces
 
 ### about
 
