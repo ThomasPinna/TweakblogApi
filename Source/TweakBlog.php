@@ -26,7 +26,6 @@
 		SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 	
-	namespace TweakblogAPI;
 	
 	require_once "TweakBlogReaction.php";
 	require_once "BlackWhiteList.php";
@@ -357,7 +356,7 @@
 					
 			// PRECONDITIONS
 			
-			if( !is_a($bwl, "TweakblogAPI\BlackWhiteList") && !is_null($bwl))
+			if( !is_a($bwl, "BlackWhiteList") && !is_null($bwl))
 				{throw new Exception("TweakBlog::getTweakBlogLatest() :argument must be a BlackWhiteList or left empty");}
 			
 			// LOGIC
