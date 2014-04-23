@@ -3,7 +3,7 @@
 </head>
 
 <?php
-    //require_once "TweakBlog.php";
+    require_once "TweakBlog.php";
     
 	//get the tweakblogs
     
@@ -11,12 +11,12 @@
 		$testcases = Array();
 		
 		// geen persoonlijk probleem met marcotm, maar hij is een mooi voorbeeld, aangezien hij heel frequent blogt
-		$bw = new BlackWhiteList(TRUE, array("marcotm") );
+		$bw = new TweakblogAPI\BlackWhiteList(TRUE, array("marcotm") );
 		
 		// get all the Tweakblogs from pinna
-		$tb = TweakBlog::getTweakblogsFrom( "pinna" );
+		$tb = TweakblogAPI\TweakBlog::getTweakblogsFrom( "pinna" );
 		// get all the latest Tweakblogs
-		$tbl= TweakBlog::getTweakblogsLatest($bw);
+		$tbl= TweakblogAPI\TweakBlog::getTweakblogsLatest($bw);
 		
 		//last tweakblog from pinna
 		$last_tb = $tb[0];
@@ -28,7 +28,7 @@
 		echo "</pre>";
 		
 		//the test tweakblog (for when things like title etcetera are not set by the getTweakblogsXXXX(function))
-		$ttb = new Tweakblog("http://pinna.tweakblogs.net/blog/10130/update-tweakblog-api-01.html");
+		$ttb = new TweakblogAPI\Tweakblog("http://pinna.tweakblogs.net/blog/10130/update-tweakblog-api-01.html");
 		
 		//print title
 		echo "<h1>";
